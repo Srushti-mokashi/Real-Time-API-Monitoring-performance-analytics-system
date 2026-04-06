@@ -1,4 +1,8 @@
-const API_URL = 'http://localhost:5000/tasks';
+// Switch between localhost and production backend
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000/tasks'
+    : 'https://your-backend-service-name.onrender.com/tasks'; // Replace with your Render URL after deployment
+
 
 // DOM Elements
 const taskForm = document.getElementById('taskForm');
