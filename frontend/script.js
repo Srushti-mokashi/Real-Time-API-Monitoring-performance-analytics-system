@@ -146,3 +146,54 @@ function showToast(message, type = "success") {
     }, 3000);
 }
 
+// Load analytics when page loads
+document.addEventListener("DOMContentLoaded", fetchAnalytics);
+
+async function fetchAnalytics() {
+    try {
+        const response = await axios.get(`${API_URL}/analytics`);
+        const analytics = response.data;
+
+        const endpoints = analytics.map(a => a.endpoint);
+        const requestCounts = analytics.map(a => a.total_requests);
+        const avgResponse = analytics.map(a => a.avg_response_time);
+
+        renderCharts(endpoints, requestCounts, avgResponse);
+
+    } catch (error) {
+        console.error("Analytics error:", error);
+    }
+}
+
+function renderCharts(endpoints, requests, responseTimes) {
+
+    const endpointCtx = document
+        .getElementById("endpointChart")
+        .getContext("2d");
+
+    new Chart(endpointCtx, {
+        type: "bar",
+        data: {
+            labels: endpoints,
+            datasets: [{
+                label: "Total Requests",
+                data: requests
+            }]
+        }
+    });
+
+    const responseCtx = document
+        .getElementById("responseChart")
+        .getContext("2d");
+
+    new Chart(responseCtx, {
+        type: "line",
+        data: {
+            labels: endpoints,
+            datasets: [{
+                label: "Avg Response Time (ms)",
+                data: responseTimes
+            }]
+        }
+    });
+}
