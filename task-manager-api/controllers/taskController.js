@@ -12,7 +12,7 @@ exports.getLogs = async (req, res) => {
     }
 };
 
-// Get performance analytics (average response time per endpoint)
+// Get performance analytics
 exports.getAnalytics = async (req, res) => {
     try {
         const analytics = await db.query(`
@@ -29,4 +29,3 @@ exports.getAnalytics = async (req, res) => {
         res.status(500).json({ message: "Database error", error: error.message });
     }
 };
-
