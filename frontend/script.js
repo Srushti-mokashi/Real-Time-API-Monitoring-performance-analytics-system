@@ -1,4 +1,3 @@
-
 // Switch between localhost (development) and deployed backend (production)
 const API_URL =
     window.location.hostname === "localhost" ||
