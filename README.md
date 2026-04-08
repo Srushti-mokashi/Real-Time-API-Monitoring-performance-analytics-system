@@ -1,7 +1,7 @@
 ### Live Demo
 
-Dashboard
-https://real-time-api-monitoring-performance-analytics-system.vercel.app
+Frontend
+https://real-time-api-monitoring-performanc.vercel.app/
 
 Backend API
 https://real-time-api-monitoring-performance-analytics-system.onrender.com
