@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-const taskRoutes = require('./routes/tasks');
-const db = require('./db'); // database connection
+const taskRoutes = require("./routes/tasks");
+const db = require("./db");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -53,15 +53,46 @@ app.use((req, res, next) => {
 
 
 // ---------------- Root Route ----------------
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
     res.json({
-        message: "Real-Time API Monitoring & Performance Analytics API is running"
+        message: "Real-Time API Monitoring & Performance Analytics API is running",
+        status: "OK",
+        timestamp: new Date()
     });
 });
 
 
+// ---------------- Health Check Route ----------------
+// Used by frontend dashboard to check API availability
+app.get("/health", async (req, res) => {
+
+    try {
+
+        // test database connection
+        await db.query("SELECT 1");
+
+        res.json({
+            status: "OK",
+            database: "connected",
+            service: "API Monitoring Backend",
+            timestamp: new Date()
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            status: "ERROR",
+            database: "disconnected",
+            error: error.message
+        });
+
+    }
+
+});
+
+
 // ---------------- API Routes ----------------
-app.use('/api', taskRoutes);
+app.use("/api", taskRoutes);
 
 
 // ---------------- 404 Handler ----------------
@@ -76,3 +107,4 @@ app.use((req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

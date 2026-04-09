@@ -1,4 +1,4 @@
-const API_URL = "https://real-time-api-monitoring-performance-analytics-system.onrender.com";
+const API_URL = "https://real-time-api-monitoring-performance-analytics-system.onrender.com/api";
 
 const taskForm = document.getElementById("taskForm");
 const taskList = document.getElementById("taskList");
