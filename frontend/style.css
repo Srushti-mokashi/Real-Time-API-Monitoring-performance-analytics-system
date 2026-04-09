@@ -1,4 +1,5 @@
-/* Custom Scrollbar for better UI experience */
+/* ---------------- SCROLLBAR ---------------- */
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -17,17 +18,113 @@
     background: #cbd5e1;
 }
 
-/* Transitions for interactive elements */
+
+/* ---------------- CARD HOVER EFFECT ---------------- */
+
+.bg-white {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bg-white:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+
+/* ---------------- SELECT DROPDOWN STYLE ---------------- */
+
 select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
 }
 
-/* Animation for rows */
+
+/* ---------------- ROW ANIMATION ---------------- */
+
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-#taskList tr:not(#loadingState):not(#emptyState) {
+#taskList tr {
     animation: fadeIn 0.3s ease-out forwards;
+}
+
+
+/* ---------------- TABLE STYLE ---------------- */
+
+table {
+    border-collapse: collapse;
+}
+
+table th {
+    font-weight: 600;
+}
+
+table td, table th {
+    padding: 12px;
+}
+
+
+/* ---------------- TABLE HOVER ---------------- */
+
+table tbody tr:hover {
+    background: #f9fafb;
+    transition: background 0.2s ease;
+}
+
+
+/* ---------------- BUTTON STYLE ---------------- */
+
+button {
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+
+/* ---------------- STATUS BADGES ---------------- */
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* SUCCESS */
+
+.status-200 {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+/* WARNING */
+
+.status-304 {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+
+/* ERROR */
+
+.status-400,
+.status-404,
+.status-500 {
+    background: #fee2e2;
+    color: #991b1b;
 }
