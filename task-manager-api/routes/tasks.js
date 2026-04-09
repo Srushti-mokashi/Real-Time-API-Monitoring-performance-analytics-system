@@ -18,16 +18,7 @@ router.put("/tasks/:id", taskController.updateTask);
 // Delete task
 router.delete("/tasks/:id", taskController.deleteTask);
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Real-Time API Monitoring Backend Running",
-    endpoints: [
-      "/api/tasks",
-      "/api/logs",
-      "/api/analytics"
-    ]
-  });
-});
+
 // ---------------- API MONITORING ROUTES ----------------
 
 // Get API logs
