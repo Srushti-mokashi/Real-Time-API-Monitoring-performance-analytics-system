@@ -12,7 +12,31 @@ const PORT = process.env.PORT || 5000;
 
 
 // ---------------- Middleware ----------------
-app.use(cors());
+// Explicitly allow frontend origin (Vercel) + localhost for dev
+const allowedOrigins = [
+    "https://real-time-api-monitoring-performanc.vercel.app",
+    "https://real-time-api-monitoring-performance-analytics-system.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g., curl, Postman) or from allowedOrigins
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS: " + origin));
+        }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
+
+// Handle preflight requests for all routes
+app.options("*", cors());
+
 app.use(express.json());
 
 
