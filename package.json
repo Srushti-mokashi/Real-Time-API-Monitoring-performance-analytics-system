@@ -1,0 +1,12 @@
+{
+  "name": "api-monitoring-system-root",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "cd task-manager-api && npm start",
+    "install-all": "cd task-manager-api && npm install",
+    "build": "cd task-manager-api && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
