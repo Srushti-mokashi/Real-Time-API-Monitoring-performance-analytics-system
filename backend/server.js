@@ -8,18 +8,12 @@ const taskRoutes = require("./routes/tasks");
 const db = require("./db");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
 
 // ---------------- Middleware ----------------
-app.use(cors()); // Simplified for verification
-// Pre-flight handled by app.use(cors()) above
-
+app.use(cors());
 app.use(express.json());
 
-
 // ---------------- API Monitoring Middleware ----------------
-// Logs every API request into api_logs table
 app.use((req, res, next) => {
 
     const start = Date.now();
@@ -57,20 +51,18 @@ app.use((req, res, next) => {
 // ---------------- Root Route ----------------
 app.get("/", (req, res) => {
     res.json({
-        message: "Real-Time API Monitoring & Performance Analytics API is running",
+        message: "Real-Time API Monitoring API running",
         status: "OK",
         timestamp: new Date()
     });
 });
 
 
-// ---------------- Health Check Route ----------------
-// Used by frontend dashboard to check API availability
+// ---------------- Health Check ----------------
 app.get("/health", async (req, res) => {
 
     try {
 
-        // test database connection
         await db.query("SELECT 1");
 
         res.json({
@@ -105,12 +97,21 @@ app.use((req, res) => {
 });
 
 
-// ---------------- Start Server ----------------
-// Start listening immediately to avoid Render/Heroku boot timeout
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// ---------------- Export App for Vercel ----------------
+module.exports = app;
 
-// Initialize database in the background
+
+// ---------------- Local Development Only ----------------
+if (process.env.NODE_ENV !== "production") {
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+
+}
+
+
+// ---------------- Initialize DB ----------------
 db.initDB();
-

@@ -6,6 +6,7 @@ An advanced full-stack monitoring solution designed for high-performance API tra
 
 > [!IMPORTANT]
 > **Production URL**: [https://real-time-api-monitoring-performanc.vercel.app/](https://real-time-api-monitoring-performanc.vercel.app/)
+> **Project Dashboard**: [https://vercel.com/team_SRHWjP5VhIwQCIAHJsOy3GBo/real-time-api-monitoring-performance-analytics-system](https://vercel.com/team_SRHWjP5VhIwQCIAHJsOy3GBo/real-time-api-monitoring-performance-analytics-system)
 
 **Backend Gateway**: [https://real-time-api-monitoring-performance-analytics-system.onrender.com](https://real-time-api-monitoring-performance-analytics-system.onrender.com)
 
