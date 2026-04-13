@@ -10,6 +10,8 @@ let endpointChart;
 let responseChart;
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("%c🚀 Antigravity Loader: Initializing API connection...", "color: #6366f1; font-weight: bold;");
+    console.log(`%c🔗 Target API URL: ${API_URL}`, "color: #94a3b8;");
 
     fetchTasks();
     fetchAnalytics();
