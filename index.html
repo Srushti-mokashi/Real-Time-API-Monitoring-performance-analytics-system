@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Advanced API Monitoring & Performance Analytics System. Track latency, health, and logs in real-time.">
+    <meta name="description"
+        content="Advanced API Monitoring & Performance Analytics System. Track latency, health, and logs in real-time.">
     <title>Antigravity | Real-Time API Analytics Dashboard</title>
 
     <!-- Google Fonts -->
@@ -48,13 +49,15 @@
 
     <header class="border-b border-dashboard-border backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            
+
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <div
+                    class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
                     <span class="text-xl">🚀</span>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                    <h1
+                        class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
                         Antigravity Monitoring
                     </h1>
                     <div id="connectionStatus" class="flex items-center gap-2">
@@ -74,7 +77,8 @@
                     </span>
                 </div>
                 <div class="h-8 w-[1px] bg-dashboard-border hidden md:block"></div>
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                <div
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                     <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                     <span class="text-[11px] font-bold text-emerald-500 uppercase">Live</span>
                 </div>
@@ -87,7 +91,7 @@
 
         <!-- STATS -->
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
+
             <div class="glass-card p-6 flex flex-col justify-between">
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Total Tasks</span>
                 <p id="taskCount" class="text-3xl font-bold mt-2 text-white">0</p>
@@ -116,7 +120,7 @@
 
         <!-- CHARTS -->
         <div class="grid lg:grid-cols-2 gap-8">
-            
+
             <div class="glass-card p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-sm font-bold uppercase tracking-tight text-slate-400">Requests per Endpoint</h2>
@@ -142,24 +146,25 @@
 
         <!-- TASK MANAGEMENT -->
         <div class="grid lg:grid-cols-3 gap-8">
-            
+
             <div class="glass-card p-6 h-fit shrink-0">
                 <h2 class="text-sm font-bold uppercase tracking-tight text-slate-400 mb-6 flex items-center gap-2">
                     <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
                     Quick Action
                 </h2>
-                
+
                 <form id="taskForm" class="space-y-4">
                     <div>
-                        <label class="text-[10px] uppercase font-bold text-slate-600 block mb-1.5 ml-1">Task Title</label>
+                        <label class="text-[10px] uppercase font-bold text-slate-600 block mb-1.5 ml-1">Task
+                            Title</label>
                         <input id="title" type="text" placeholder="e.g. System Audit" required
-                               class="glass-input w-full" />
+                            class="glass-input w-full" />
                     </div>
 
                     <div>
                         <label class="text-[10px] uppercase font-bold text-slate-600 block mb-1.5 ml-1">Notes</label>
                         <textarea id="description" placeholder="Capture details..." rows="3"
-                                  class="glass-input w-full"></textarea>
+                            class="glass-input w-full"></textarea>
                     </div>
 
                     <div>
@@ -170,7 +175,8 @@
                         </select>
                     </div>
 
-                    <button class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-2">
+                    <button
+                        class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-2">
                         Deploy Task
                     </button>
                 </form>
@@ -179,9 +185,10 @@
             <div class="lg:col-span-2 glass-card overflow-hidden">
                 <div class="p-5 border-b border-dashboard-border flex justify-between items-center bg-slate-800/20">
                     <h2 class="text-sm font-bold uppercase tracking-tight text-slate-400">Task Inventory</h2>
-                    <span class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 text-[10px] font-bold">Live Data</span>
+                    <span class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 text-[10px] font-bold">Live
+                        Data</span>
                 </div>
-                
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm whitespace-nowrap">
                         <thead class="bg-slate-800/30 text-slate-500 text-[10px] uppercase font-bold">
@@ -211,7 +218,7 @@
                     <span class="text-[10px] font-bold text-slate-500 uppercase">Streaming active</span>
                 </div>
             </div>
-            
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-slate-800/30 text-slate-500 text-[10px] uppercase font-bold">
@@ -241,4 +248,5 @@
     <script src="script.js"></script>
 
 </body>
+
 </html>

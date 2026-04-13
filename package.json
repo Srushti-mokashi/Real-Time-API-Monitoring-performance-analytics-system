@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node backend/server.js",
+    "build": "echo 'Static assets ready'",
     "backend": "node backend/server.js"
   },
   "dependencies": {

@@ -11,9 +11,9 @@ let responseChart;
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("%c🚀 Antigravity Loader: Initializing API connection...", "color: #6366f1; font-weight: bold;");
-    
+
     updateConnectionStatus("Connecting...", "yellow");
-    
+
     fetchInitialData();
 
     // Auto refresh
@@ -55,7 +55,7 @@ async function fetchTasks() {
 }
 
 
-function renderTasks(tasks){
+function renderTasks(tasks) {
 
     taskList.innerHTML = "";
 
@@ -74,8 +74,8 @@ function renderTasks(tasks){
         <td class="px-6 py-4">
             <select onchange="updateStatus(${task.id},this.value)" 
                     class="glass-input text-[11px] py-1 px-2 border-none ring-1 ring-slate-700/50">
-                <option value="Pending" ${task.status==="Pending"?"selected":""}>Pending</option>
-                <option value="Completed" ${task.status==="Completed"?"selected":""}>Completed</option>
+                <option value="Pending" ${task.status === "Pending" ? "selected" : ""}>Pending</option>
+                <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
             </select>
         </td>
 
@@ -100,7 +100,7 @@ function renderTasks(tasks){
 
 // ---------------- ADD TASK ----------------
 
-taskForm.addEventListener("submit", async(e)=>{
+taskForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const title = document.getElementById("title").value;
     const description = document.getElementById("description").value;
@@ -120,9 +120,9 @@ taskForm.addEventListener("submit", async(e)=>{
 
 // ---------------- UPDATE TASK ----------------
 
-async function updateStatus(id,status){
+async function updateStatus(id, status) {
 
-    await axios.put(`${API_URL}/tasks/${id}`,{status});
+    await axios.put(`${API_URL}/tasks/${id}`, { status });
 
     fetchTasks();
 
@@ -131,7 +131,7 @@ async function updateStatus(id,status){
 
 // ---------------- DELETE TASK ----------------
 
-async function deleteTask(id){
+async function deleteTask(id) {
 
     await axios.delete(`${API_URL}/tasks/${id}`);
 
@@ -149,23 +149,22 @@ async function fetchAnalytics() {
 
         // Update Stats Widgets
         if (taskCount) taskCount.innerText = totalTasks;
-        
+
         const errorRateElement = document.getElementById("errorRate");
         if (errorRateElement) errorRateElement.innerText = `${errorRate}%`;
-        
+
         const latencyIndicator = document.getElementById("latencyIndicator");
         if (latencyIndicator) {
             latencyIndicator.innerText = `${avgLatency} ms`;
             // Dynamic color based on latency
-            latencyIndicator.className = `text-sm font-bold drop-shadow-sm ${
-                avgLatency < 300 ? "text-emerald-400" : (avgLatency < 800 ? "text-yellow-400" : "text-red-400")
-            }`;
+            latencyIndicator.className = `text-sm font-bold drop-shadow-sm ${avgLatency < 300 ? "text-emerald-400" : (avgLatency < 800 ? "text-yellow-400" : "text-red-400")
+                }`;
         }
 
         // Update Charts
         const endpoints = endpointStats.map(a => a.endpoint);
         const requests = endpointStats.map(a => Number(a.count));
-        
+
         // For the response chart, we'll use a dummy trend line or actual latency per endpoint if we had it
         // Since we have avgLatency globally, we'll just show the request distribution primarily
         renderCharts(endpoints, requests, Array(endpoints.length).fill(avgLatency));
@@ -180,7 +179,7 @@ async function fetchAnalytics() {
 
 // ---------------- FETCH API LOGS ----------------
 
-async function fetchLogs(){
+async function fetchLogs() {
 
     const res = await axios.get(`${API_URL}/logs`);
 
@@ -190,7 +189,7 @@ async function fetchLogs(){
     const errorRateElement = document.getElementById("errorRate");
     const latencyIndicator = document.getElementById("latencyIndicator");
 
-    if(!table) return;
+    if (!table) return;
 
     table.innerHTML = "";
 
@@ -218,57 +217,57 @@ async function fetchLogs(){
 
 // ---------------- CHARTS ----------------
 
-function renderCharts(endpoints, requests, responseTimes){
+function renderCharts(endpoints, requests, responseTimes) {
 
-    if(endpointChart) endpointChart.destroy();
-    if(responseChart) responseChart.destroy();
+    if (endpointChart) endpointChart.destroy();
+    if (responseChart) responseChart.destroy();
 
 
-    endpointChart = new Chart(document.getElementById("endpointChart"),{
+    endpointChart = new Chart(document.getElementById("endpointChart"), {
 
-        type:"bar",
+        type: "bar",
 
-        data:{
-            labels:endpoints,
-            datasets:[{
-                label:"Requests",
-                data:requests,
-                backgroundColor:"#6366f1",
-                borderRadius:6
+        data: {
+            labels: endpoints,
+            datasets: [{
+                label: "Requests",
+                data: requests,
+                backgroundColor: "#6366f1",
+                borderRadius: 6
             }]
         },
 
-        options:{
-            animation:{duration:1200,easing:"easeOutQuart"},
-            responsive:true,
-            maintainAspectRatio:true,
-            plugins:{legend:{display:false}}
+        options: {
+            animation: { duration: 1200, easing: "easeOutQuart" },
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } }
         }
 
     });
 
 
-    responseChart = new Chart(document.getElementById("responseChart"),{
+    responseChart = new Chart(document.getElementById("responseChart"), {
 
-        type:"line",
+        type: "line",
 
-        data:{
-            labels:endpoints,
-            datasets:[{
-                label:"Response Time",
-                data:responseTimes,
-                borderColor:"#10b981",
-                backgroundColor:"rgba(16,185,129,0.1)",
-                fill:true,
-                tension:0.4
+        data: {
+            labels: endpoints,
+            datasets: [{
+                label: "Response Time",
+                data: responseTimes,
+                borderColor: "#10b981",
+                backgroundColor: "rgba(16,185,129,0.1)",
+                fill: true,
+                tension: 0.4
             }]
         },
 
-        options:{
-            animation:{duration:1200,easing:"easeOutQuart"},
-            responsive:true,
-            maintainAspectRatio:true,
-            plugins:{legend:{display:false}}
+        options: {
+            animation: { duration: 1200, easing: "easeOutQuart" },
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } }
         }
 
     });
