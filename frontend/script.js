@@ -11,27 +11,47 @@ let responseChart;
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("%c🚀 Antigravity Loader: Initializing API connection...", "color: #6366f1; font-weight: bold;");
-    console.log(`%c🔗 Target API URL: ${API_URL}`, "color: #94a3b8;");
-
-    fetchTasks();
-    fetchAnalytics();
-    fetchLogs();
+    
+    updateConnectionStatus("Connecting...", "yellow");
+    
+    fetchInitialData();
 
     // Auto refresh
     setInterval(fetchLogs, 5000);
     setInterval(fetchAnalytics, 8000);
-
 });
+
+async function fetchInitialData() {
+    try {
+        await Promise.all([fetchTasks(), fetchAnalytics(), fetchLogs()]);
+        updateConnectionStatus("Live", "emerald");
+    } catch (err) {
+        console.error("Initial load failed:", err.message);
+        updateConnectionStatus("Backend Offline", "red");
+    }
+}
+
+function updateConnectionStatus(text, color) {
+    const statusText = document.getElementById("statusText");
+    const statusDot = document.getElementById("statusDot");
+    if (statusText) statusText.innerText = text;
+    if (statusDot) {
+        statusDot.className = `w-1.5 h-1.5 rounded-full glow-point bg-${color}-500`;
+    }
+}
 
 
 // ---------------- FETCH TASKS ----------------
 
-async function fetchTasks(){
-
-    const res = await axios.get(`${API_URL}/tasks`);
-
-    renderTasks(res.data);
-
+async function fetchTasks() {
+    try {
+        const res = await axios.get(`${API_URL}/tasks`);
+        renderTasks(res.data);
+        updateConnectionStatus("Live", "emerald");
+    } catch (err) {
+        console.error("Fetch tasks failed:", err.message);
+        updateConnectionStatus("Offline", "red");
+    }
 }
 
 
@@ -81,23 +101,20 @@ function renderTasks(tasks){
 // ---------------- ADD TASK ----------------
 
 taskForm.addEventListener("submit", async(e)=>{
-
     e.preventDefault();
-
     const title = document.getElementById("title").value;
     const description = document.getElementById("description").value;
     const status = document.getElementById("status").value;
 
-    await axios.post(`${API_URL}/tasks`, {
-        title,
-        description,
-        status
-    });
-
-    taskForm.reset();
-
-    fetchTasks();
-
+    try {
+        await axios.post(`${API_URL}/tasks`, { title, description, status });
+        taskForm.reset();
+        await fetchTasks();
+        updateConnectionStatus("Live", "emerald");
+    } catch (err) {
+        console.error("Add task failed:", err.message);
+        updateConnectionStatus("Offline / Failed", "red");
+    }
 });
 
 

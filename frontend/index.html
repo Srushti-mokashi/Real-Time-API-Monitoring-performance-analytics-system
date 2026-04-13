@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- Dependencies -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -57,9 +57,12 @@
                     <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
                         Antigravity Monitoring
                     </h1>
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">
-                        Real-Time API Intelligence
-                    </p>
+                    <div id="connectionStatus" class="flex items-center gap-2">
+                        <div id="statusDot" class="w-1.5 h-1.5 rounded-full bg-red-500 glow-point"></div>
+                        <p id="statusText" class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">
+                            Initializing Connection...
+                        </p>
+                    </div>
                 </div>
             </div>
 
