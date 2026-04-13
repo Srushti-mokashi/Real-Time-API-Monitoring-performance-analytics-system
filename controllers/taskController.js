@@ -84,19 +84,43 @@ exports.getLogs = async (req, res) => {
   }
 };
 
-// Get analytics
+// Get combined analytics
 exports.getAnalytics = async (req, res) => {
   try {
-    const analytics = await db.query(`
-      SELECT endpoint,
-             COUNT(*) AS total_requests,
-             AVG(response_time) AS avg_response_time
+    // 1. Total tasks counter
+    const tasksCountResult = await db.query("SELECT COUNT(*) FROM tasks");
+    const totalTasks = parseInt(tasksCountResult[0].count);
+
+    // 2. Latency and Error Analytics from logs
+    const logStats = await db.query(`
+      SELECT 
+        AVG(response_time) as avg_latency,
+        COUNT(*) as total_requests,
+        COUNT(*) FILTER (WHERE status >= 400) as error_count
       FROM api_logs
-      GROUP BY endpoint
-      ORDER BY avg_response_time DESC
     `);
 
-    res.json(analytics);
+    const avgLatency = Math.round(logStats[0].avg_latency || 0);
+    const totalRequests = parseInt(logStats[0].total_requests || 0);
+    const errorCount = parseInt(logStats[0].error_count || 0);
+    const errorRate = totalRequests > 0 ? ((errorCount / totalRequests) * 100).toFixed(2) : 0;
+
+    // 3. Per-endpoint statistics
+    const endpointStats = await db.query(`
+      SELECT endpoint, COUNT(*) as count, AVG(status) as avg_status
+      FROM api_logs
+      GROUP BY endpoint
+      ORDER BY count DESC
+    `);
+
+    res.json({
+      totalTasks,
+      avgLatency,
+      totalRequests,
+      errorRate,
+      endpointStats
+    });
+
   } catch (error) {
     res.status(500).json({ message: "Database error", error: error.message });
   }

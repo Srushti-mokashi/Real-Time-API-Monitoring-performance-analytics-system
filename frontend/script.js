@@ -142,16 +142,39 @@ async function deleteTask(id){
 
 // ---------------- FETCH ANALYTICS ----------------
 
-async function fetchAnalytics(){
+async function fetchAnalytics() {
+    try {
+        const res = await axios.get(`${API_URL}/analytics`);
+        const { totalTasks, avgLatency, errorRate, endpointStats } = res.data;
 
-    const res = await axios.get(`${API_URL}/analytics`);
+        // Update Stats Widgets
+        if (taskCount) taskCount.innerText = totalTasks;
+        
+        const errorRateElement = document.getElementById("errorRate");
+        if (errorRateElement) errorRateElement.innerText = `${errorRate}%`;
+        
+        const latencyIndicator = document.getElementById("latencyIndicator");
+        if (latencyIndicator) {
+            latencyIndicator.innerText = `${avgLatency} ms`;
+            // Dynamic color based on latency
+            latencyIndicator.className = `text-sm font-bold drop-shadow-sm ${
+                avgLatency < 300 ? "text-emerald-400" : (avgLatency < 800 ? "text-yellow-400" : "text-red-400")
+            }`;
+        }
 
-    const endpoints = res.data.map(a => a.endpoint);
-    const requests = res.data.map(a => Number(a.total_requests));
-    const responseTimes = res.data.map(a => Number(a.avg_response_time));
+        // Update Charts
+        const endpoints = endpointStats.map(a => a.endpoint);
+        const requests = endpointStats.map(a => Number(a.count));
+        
+        // For the response chart, we'll use a dummy trend line or actual latency per endpoint if we had it
+        // Since we have avgLatency globally, we'll just show the request distribution primarily
+        renderCharts(endpoints, requests, Array(endpoints.length).fill(avgLatency));
 
-    renderCharts(endpoints, requests, responseTimes);
-
+        updateConnectionStatus("Live", "emerald");
+    } catch (err) {
+        console.error("Fetch analytics failed:", err.message);
+        updateConnectionStatus("Offline", "red");
+    }
 }
 
 
@@ -174,11 +197,6 @@ async function fetchLogs(){
     let errorCount = 0;
 
     logs.forEach(log => {
-
-        if(log.status >= 400){
-            errorCount++;
-        }
-
         const row = document.createElement("tr");
 
         row.innerHTML = `
@@ -194,36 +212,7 @@ async function fetchLogs(){
         `;
 
         table.appendChild(row);
-
-        // Latency indicator
-        if(latencyIndicator){
-
-            if(log.response_time < 300){
-                latencyIndicator.innerText = "Fast";
-                latencyIndicator.className = "font-bold text-green-400";
-            }
-            else if(log.response_time < 800){
-                latencyIndicator.innerText = "Moderate";
-                latencyIndicator.className = "font-bold text-yellow-400";
-            }
-            else{
-                latencyIndicator.innerText = "Slow";
-                latencyIndicator.className = "font-bold text-red-400";
-            }
-
-        }
-
     });
-
-    // Calculate error rate safely
-    if(errorRateElement && logs.length > 0){
-
-        const errorRate = ((errorCount / logs.length) * 100).toFixed(1);
-
-        errorRateElement.innerText = `${errorRate}%`;
-
-    }
-
 }
 
 
