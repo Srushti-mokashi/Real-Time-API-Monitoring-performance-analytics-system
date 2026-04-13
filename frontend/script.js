@@ -42,22 +42,28 @@ function renderTasks(tasks){
         const row = document.createElement("tr");
 
         row.innerHTML = `
-        <td class="p-3">
-            <div class="font-semibold">${task.title}</div>
-            <div class="text-sm text-gray-500">${task.description || "No description"}</div>
+        <td class="px-6 py-4">
+            <div class="font-bold text-white">${task.title}</div>
+            <div class="text-[10px] text-slate-500 truncate max-w-[200px]">${task.description || "No additional context"}</div>
         </td>
 
-        <td>
-            <select onchange="updateStatus(${task.id},this.value)">
+        <td class="px-6 py-4">
+            <select onchange="updateStatus(${task.id},this.value)" 
+                    class="glass-input text-[11px] py-1 px-2 border-none ring-1 ring-slate-700/50">
                 <option value="Pending" ${task.status==="Pending"?"selected":""}>Pending</option>
                 <option value="Completed" ${task.status==="Completed"?"selected":""}>Completed</option>
             </select>
         </td>
 
-        <td>${new Date(task.created_at).toLocaleDateString()}</td>
+        <td class="px-6 py-4 text-slate-500 text-[11px] font-mono">
+            ${new Date(task.created_at).toLocaleDateString()}
+        </td>
 
-        <td>
-            <button onclick="deleteTask(${task.id})" class="text-red-500">Delete</button>
+        <td class="px-6 py-4 text-right">
+            <button onclick="deleteTask(${task.id})" 
+                    class="text-red-400 hover:text-red-300 text-[11px] font-bold uppercase tracking-wider transition-colors">
+                Terminate
+            </button>
         </td>
         `;
 
@@ -155,11 +161,15 @@ async function fetchLogs(){
         const row = document.createElement("tr");
 
         row.innerHTML = `
-        <td>${log.endpoint}</td>
-        <td class="font-semibold text-blue-500">${log.method}</td>
-        <td>${log.response_time} ms</td>
-        <td><span class="status-badge status-${log.status}">${log.status}</span></td>
-        <td>${new Date(log.created_at).toLocaleString()}</td>
+        <td class="px-6 py-4 font-bold text-slate-300">${log.endpoint}</td>
+        <td class="px-6 py-4">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                ${log.method}
+            </span>
+        </td>
+        <td class="px-6 py-4 text-slate-400 font-mono text-[11px]">${log.response_time} ms</td>
+        <td class="px-6 py-4"><span class="status-badge status-${log.status}">${log.status}</span></td>
+        <td class="px-6 py-4 text-slate-500 text-[11px] font-mono">${new Date(log.created_at).toLocaleString()}</td>
         `;
 
         table.appendChild(row);

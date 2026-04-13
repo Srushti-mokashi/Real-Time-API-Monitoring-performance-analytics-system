@@ -1,3 +1,51 @@
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.5);
+    --border-color: rgba(148, 163, 184, 0.1);
+    --accent-indigo: #6366f1;
+    --accent-emerald: #10b981;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+/* ---------------- GLASSMORPHISM ---------------- */
+
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px border var(--border-color);
+    border-radius: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+.glass-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+    outline: none;
+    border-color: var(--accent-indigo);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
 /* ---------------- SCROLLBAR ---------------- */
 
 ::-webkit-scrollbar {
@@ -6,47 +54,24 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+    background: rgba(148, 163, 184, 0.2);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
+    background: rgba(148, 163, 184, 0.3);
 }
 
+/* ---------------- ANIMATIONS ---------------- */
 
-/* ---------------- CARD HOVER EFFECT ---------------- */
-
-.bg-white {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.bg-white:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-
-/* ---------------- SELECT DROPDOWN STYLE ---------------- */
-
-select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
-}
-
-
-/* ---------------- ROW ANIMATION ---------------- */
-
-@keyframes fadeIn {
+@keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -54,77 +79,61 @@ select {
     }
 }
 
-#taskList tr {
-    animation: fadeIn 0.3s ease-out forwards;
+main > * {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-
-/* ---------------- TABLE STYLE ---------------- */
-
-table {
-    border-collapse: collapse;
-}
-
-table th {
-    font-weight: 600;
-}
-
-table td, table th {
-    padding: 12px;
-}
-
-
-/* ---------------- TABLE HOVER ---------------- */
-
-table tbody tr:hover {
-    background: #f9fafb;
-    transition: background 0.2s ease;
-}
-
-
-/* ---------------- BUTTON STYLE ---------------- */
-
-button {
+#taskList tr, #logsTable tr {
     transition: all 0.2s ease;
-    font-weight: 500;
 }
 
-button:hover {
-    transform: scale(1.05);
+#taskList tr:hover, #logsTable tr:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
-
 
 /* ---------------- STATUS BADGES ---------------- */
 
 .status-badge {
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
-
-
-/* SUCCESS */
 
 .status-200 {
-    background: #dcfce7;
-    color: #166534;
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
-
-
-/* WARNING */
 
 .status-304 {
-    background: #fef3c7;
-    color: #92400e;
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
-
-/* ERROR */
-
-.status-400,
-.status-404,
-.status-500 {
-    background: #fee2e2;
-    color: #991b1b;
+.status-400, .status-404, .status-500 {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
+
+/* ---------------- TABLE HELPERS ---------------- */
+
+table td {
+    padding: 1rem 1.5rem;
+}
+
+table th {
+    letter-spacing: 0.05em;
+}
+
+/* ---------------- CHART TWEAKS ---------------- */
+
+canvas {
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}

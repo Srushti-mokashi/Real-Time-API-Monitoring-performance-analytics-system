@@ -1,13 +1,18 @@
-### Live Demo
+# 🚀 Real-Time API Monitoring & Performance Analytics System
 
-Frontend
-https://real-time-api-monitoring-performanc.vercel.app/
+An advanced full-stack monitoring solution designed for high-performance API tracking, latency analytics, and system health visualization.
 
-Backend API
-https://real-time-api-monitoring-performance-analytics-system.onrender.com
+### 🌐 Live Demo & Deployment
 
-Sample Endpoint
-https://real-time-api-monitoring-performance-analytics-system.onrender.com/api/analytics
+> [!IMPORTANT]
+> **Production URL**: [https://real-time-api-monitoring-performanc.vercel.app/](https://real-time-api-monitoring-performanc.vercel.app/)
 
-Database
-Hosted on Neon PostgreSQL
+**Backend Gateway**: [https://real-time-api-monitoring-performance-analytics-system.onrender.com](https://real-time-api-monitoring-performance-analytics-system.onrender.com)
+
+**Key Metrics Endpoint**: `/api/analytics`
+
+### 🛠 Tech Stack
+- **Frontend**: HTML5, Vanilla CSS (Glassmorphism), Tailwind CSS, Chart.js, Axios
+- **Backend**: Node.js, Express.js
+- **Database**: Neon PostgreSQL
+- **Deployment**: Vercel (Frontend), Render (Backend)
