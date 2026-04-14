@@ -70,7 +70,7 @@ app.get("/health", async (req, res) => {
 });
 
 // ---------------- API Routes ----------------
-app.use("/api", taskRoutes);
+app.use("/", taskRoutes);
 
 // ---------------- 404 Handler ----------------
 app.use((req, res) => {
