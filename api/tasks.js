@@ -2,6 +2,9 @@ const db = require("../backend/db");
 
 export default async function handler(req, res) {
 
+    // Initialize DB tables (safe to call each time in serverless)
+    await db.initDB();
+
     if (req.method === "GET") {
         try {
 
@@ -9,11 +12,11 @@ export default async function handler(req, res) {
                 "SELECT * FROM tasks ORDER BY created_at DESC"
             );
 
-            res.status(200).json(tasks);
+            return res.status(200).json(tasks);
 
         } catch (err) {
 
-            res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: err.message });
 
         }
     }
@@ -29,14 +32,17 @@ export default async function handler(req, res) {
                 [title, description, status]
             );
 
-            res.status(201).json(newTask[0]);
+            return res.status(201).json(newTask[0]);
 
         } catch (err) {
 
-            res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: err.message });
 
         }
 
     }
+
+    // If method not allowed
+    return res.status(405).json({ message: "Method not allowed" });
 
 }
