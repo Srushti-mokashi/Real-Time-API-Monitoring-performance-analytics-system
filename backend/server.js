@@ -15,15 +15,12 @@ app.use(express.json());
 
 // ---------------- API Monitoring Middleware ----------------
 app.use((req, res, next) => {
-
     const start = Date.now();
 
     res.on("finish", async () => {
-
         const responseTime = Date.now() - start;
 
         try {
-
             await db.query(
                 `INSERT INTO api_logs (endpoint, method, response_time, status)
                  VALUES ($1,$2,$3,$4)`,
@@ -34,19 +31,13 @@ app.use((req, res, next) => {
                     res.statusCode
                 ]
             );
-
         } catch (err) {
-
             console.error("API log insert error:", err.message);
-
         }
-
     });
 
     next();
-
 });
-
 
 // ---------------- Root Route ----------------
 app.get("/", (req, res) => {
@@ -57,12 +48,9 @@ app.get("/", (req, res) => {
     });
 });
 
-
 // ---------------- Health Check ----------------
 app.get("/health", async (req, res) => {
-
     try {
-
         await db.query("SELECT 1");
 
         res.json({
@@ -73,21 +61,16 @@ app.get("/health", async (req, res) => {
         });
 
     } catch (error) {
-
         res.status(500).json({
             status: "ERROR",
             database: "disconnected",
             error: error.message
         });
-
     }
-
 });
-
 
 // ---------------- API Routes ----------------
 app.use("/api", taskRoutes);
-
 
 // ---------------- 404 Handler ----------------
 app.use((req, res) => {
@@ -96,22 +79,8 @@ app.use((req, res) => {
     });
 });
 
-
-// ---------------- Export App for Vercel ----------------
-module.exports = app;
-
-
-// ---------------- Local Development Only ----------------
-if (process.env.NODE_ENV !== "production") {
-
-    const PORT = process.env.PORT || 5000;
-
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-
-}
-
-
 // ---------------- Initialize DB ----------------
 db.initDB();
+
+// ---------------- Export for Vercel ----------------
+module.exports = app;
