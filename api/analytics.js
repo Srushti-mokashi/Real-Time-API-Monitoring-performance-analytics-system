@@ -1,6 +1,6 @@
-const db = require("../backend/db");
+import db from "../backend/db.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
 
     await db.initDB();
 
@@ -61,4 +61,4 @@ module.exports = async function handler(req, res) {
 
     }
 
-};
+}

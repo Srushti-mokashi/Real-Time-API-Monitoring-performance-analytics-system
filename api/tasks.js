@@ -1,16 +1,19 @@
-const db = require("../backend/db");
+import db from "../backend/db.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
 
     await db.initDB();
 
     try {
 
         if (req.method === "GET") {
+
             const tasks = await db.query(
                 "SELECT * FROM tasks ORDER BY created_at DESC"
             );
+
             return res.status(200).json(tasks);
+
         }
 
         if (req.method === "POST") {
@@ -23,6 +26,7 @@ module.exports = async function handler(req, res) {
             );
 
             return res.status(201).json(newTask[0]);
+
         }
 
         if (req.method === "PUT") {
@@ -36,6 +40,7 @@ module.exports = async function handler(req, res) {
             );
 
             return res.status(200).json(updated[0]);
+
         }
 
         if (req.method === "DELETE") {
@@ -45,6 +50,7 @@ module.exports = async function handler(req, res) {
             await db.query("DELETE FROM tasks WHERE id=$1", [id]);
 
             return res.status(200).json({ message: "Task deleted" });
+
         }
 
         return res.status(405).json({ message: "Method not allowed" });
@@ -52,8 +58,9 @@ module.exports = async function handler(req, res) {
     } catch (err) {
 
         console.error(err);
+
         return res.status(500).json({ error: err.message });
 
     }
 
-};
+}
