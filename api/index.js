@@ -4,8 +4,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const taskRoutes = require("./routes/tasks");
-const db = require("./db");
+const taskRoutes = require("../backend/routes/tasks");
+const db = require("../backend/db");
 
 const app = express();
 
@@ -83,4 +83,6 @@ app.use((req, res) => {
 db.initDB();
 
 // ---------------- Export for Vercel ----------------
-module.exports = app;
+const serverless = require("serverless-http");
+
+module.exports = serverless(app);
