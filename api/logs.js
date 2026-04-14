@@ -1,6 +1,6 @@
 const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
 
     await db.initDB();
 
@@ -18,4 +18,4 @@ export default async function handler(req, res) {
 
     }
 
-}
+};

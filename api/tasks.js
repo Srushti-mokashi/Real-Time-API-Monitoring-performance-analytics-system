@@ -1,6 +1,7 @@
 const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+
     await db.initDB();
 
     try {
@@ -13,6 +14,7 @@ export default async function handler(req, res) {
         }
 
         if (req.method === "POST") {
+
             const { title, description, status } = req.body;
 
             const newTask = await db.query(
@@ -24,6 +26,7 @@ export default async function handler(req, res) {
         }
 
         if (req.method === "PUT") {
+
             const id = req.query.id;
             const { status } = req.body;
 
@@ -36,6 +39,7 @@ export default async function handler(req, res) {
         }
 
         if (req.method === "DELETE") {
+
             const id = req.query.id;
 
             await db.query("DELETE FROM tasks WHERE id=$1", [id]);
@@ -46,7 +50,10 @@ export default async function handler(req, res) {
         return res.status(405).json({ message: "Method not allowed" });
 
     } catch (err) {
+
         console.error(err);
         return res.status(500).json({ error: err.message });
+
     }
-}
+
+};

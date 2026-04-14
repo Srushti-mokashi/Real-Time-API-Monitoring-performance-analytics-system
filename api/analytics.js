@@ -1,6 +1,6 @@
 const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
 
     await db.initDB();
 
@@ -14,39 +14,51 @@ export default async function handler(req, res) {
         let totalLatency = 0;
         let errorCount = 0;
 
-        logs.forEach(l => {
-            totalLatency += Number(l.response_time || 0);
-            if (l.status >= 400) errorCount++;
+        logs.forEach(log => {
+            totalLatency += Number(log.response_time || 0);
+
+            if (log.status >= 400) {
+                errorCount++;
+            }
         });
 
         const avgLatency =
-            logs.length === 0 ? 0 : Math.round(totalLatency / logs.length);
+            logs.length === 0
+                ? 0
+                : Math.round(totalLatency / logs.length);
 
         const errorRate =
-            logs.length === 0 ? 0 : Math.round((errorCount / logs.length) * 100);
+            logs.length === 0
+                ? 0
+                : Math.round((errorCount / logs.length) * 100);
 
-        const endpointStats = {};
+        const endpointMap = {};
 
-        logs.forEach(l => {
-            endpointStats[l.endpoint] = (endpointStats[l.endpoint] || 0) + 1;
+        logs.forEach(log => {
+            endpointMap[log.endpoint] =
+                (endpointMap[log.endpoint] || 0) + 1;
         });
 
-        const endpointArray = Object.keys(endpointStats).map(e => ({
-            endpoint: e,
-            count: endpointStats[e]
+        const endpointStats = Object.keys(endpointMap).map(endpoint => ({
+            endpoint,
+            count: endpointMap[endpoint]
         }));
 
         return res.status(200).json({
             totalTasks,
             avgLatency,
             errorRate,
-            endpointStats: endpointArray
+            endpointStats
         });
 
     } catch (err) {
 
-        return res.status(500).json({ error: err.message });
+        console.error("Analytics error:", err);
+
+        return res.status(500).json({
+            error: err.message
+        });
 
     }
 
-}
+};
