@@ -1,7 +1,6 @@
-const db = require("../backend/db");
+import db from "../backend/db.js";
 
 export default async function handler(req, res) {
-
     try {
 
         await db.query("SELECT 1");
@@ -19,5 +18,4 @@ export default async function handler(req, res) {
         });
 
     }
-
 }
