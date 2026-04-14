@@ -83,6 +83,4 @@ app.use((req, res) => {
 db.initDB();
 
 // ---------------- Export for Vercel ----------------
-const serverless = require("serverless-http");
-
-module.exports = serverless(app);
+export default app;
