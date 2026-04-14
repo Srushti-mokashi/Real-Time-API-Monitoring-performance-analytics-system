@@ -1,16 +1,11 @@
-import db from "../backend/db.js";
+const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
 
   await db.initDB();
 
   try {
 
-    // Extract ID from URL if present
-    const urlParts = req.url.split("/");
-    const id = urlParts.length > 3 ? urlParts[urlParts.length - 1] : null;
-
-    // ---------------- GET TASKS ----------------
     if (req.method === "GET") {
 
       const tasks = await db.query(
@@ -20,7 +15,6 @@ export default async function handler(req, res) {
       return res.status(200).json(tasks);
     }
 
-    // ---------------- CREATE TASK ----------------
     if (req.method === "POST") {
 
       const { title, description, status } = req.body;
@@ -33,13 +27,9 @@ export default async function handler(req, res) {
       return res.status(201).json(newTask[0]);
     }
 
-    // ---------------- UPDATE TASK ----------------
     if (req.method === "PUT") {
 
-      if (!id) {
-        return res.status(400).json({ error: "Task ID required" });
-      }
-
+      const id = req.query.id;
       const { status } = req.body;
 
       const updated = await db.query(
@@ -50,27 +40,24 @@ export default async function handler(req, res) {
       return res.status(200).json(updated[0]);
     }
 
-    // ---------------- DELETE TASK ----------------
     if (req.method === "DELETE") {
 
-      if (!id) {
-        return res.status(400).json({ error: "Task ID required" });
-      }
+      const id = req.query.id;
 
-      await db.query("DELETE FROM tasks WHERE id=$1", [id]);
+      await db.query(
+        "DELETE FROM tasks WHERE id=$1",
+        [id]
+      );
 
       return res.status(200).json({ message: "Task deleted" });
     }
 
-    return res.status(405).json({ message: "Method not allowed" });
+    res.status(405).json({ message: "Method not allowed" });
 
   } catch (err) {
 
-    console.error("Tasks API error:", err);
-
-    return res.status(500).json({
-      error: err.message
-    });
+    res.status(500).json({ error: err.message });
 
   }
-}
+
+};

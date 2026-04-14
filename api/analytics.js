@@ -1,64 +1,71 @@
-import db from "../backend/db.js";
+const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
 
-    await db.initDB();
+  await db.initDB();
 
-    try {
+  try {
 
-        const totalTasksResult = await db.query("SELECT COUNT(*) FROM tasks");
-        const logs = await db.query("SELECT * FROM api_logs");
+    const totalTasksResult = await db.query(
+      "SELECT COUNT(*) FROM tasks"
+    );
 
-        const totalTasks = Number(totalTasksResult[0].count);
+    const logs = await db.query(
+      "SELECT * FROM api_logs"
+    );
 
-        let totalLatency = 0;
-        let errorCount = 0;
+    const totalTasks = Number(totalTasksResult[0].count);
 
-        logs.forEach(log => {
-            totalLatency += Number(log.response_time || 0);
+    let totalLatency = 0;
+    let errorCount = 0;
 
-            if (log.status >= 400) {
-                errorCount++;
-            }
-        });
+    logs.forEach(log => {
 
-        const avgLatency =
-            logs.length === 0
-                ? 0
-                : Math.round(totalLatency / logs.length);
+      totalLatency += Number(log.response_time || 0);
 
-        const errorRate =
-            logs.length === 0
-                ? 0
-                : Math.round((errorCount / logs.length) * 100);
+      if (log.status >= 400) {
+        errorCount++;
+      }
 
-        const endpointMap = {};
+    });
 
-        logs.forEach(log => {
-            endpointMap[log.endpoint] =
-                (endpointMap[log.endpoint] || 0) + 1;
-        });
+    const avgLatency =
+      logs.length === 0
+        ? 0
+        : Math.round(totalLatency / logs.length);
 
-        const endpointStats = Object.keys(endpointMap).map(endpoint => ({
-            endpoint,
-            count: endpointMap[endpoint]
-        }));
+    const errorRate =
+      logs.length === 0
+        ? 0
+        : Math.round((errorCount / logs.length) * 100);
 
-        return res.status(200).json({
-            totalTasks,
-            avgLatency,
-            errorRate,
-            endpointStats
-        });
+    const endpointMap = {};
 
-    } catch (err) {
+    logs.forEach(log => {
 
-        console.error("Analytics error:", err);
+      endpointMap[log.endpoint] =
+        (endpointMap[log.endpoint] || 0) + 1;
 
-        return res.status(500).json({
-            error: err.message
-        });
+    });
 
-    }
+    const endpointStats = Object.keys(endpointMap).map(endpoint => ({
+      endpoint,
+      count: endpointMap[endpoint]
+    }));
 
-}
+    res.status(200).json({
+      totalTasks,
+      avgLatency,
+      errorRate,
+      endpointStats
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+};

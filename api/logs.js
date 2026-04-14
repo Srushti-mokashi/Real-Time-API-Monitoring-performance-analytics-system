@@ -1,21 +1,20 @@
-import db from "../backend/db.js";
+const db = require("../backend/db");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
 
-    await db.initDB();
+  await db.initDB();
 
-    try {
+  try {
 
-        const logs = await db.query(
-            "SELECT * FROM api_logs ORDER BY created_at DESC LIMIT 50"
-        );
+    const logs = await db.query(
+      "SELECT * FROM api_logs ORDER BY created_at DESC LIMIT 50"
+    );
 
-        return res.status(200).json(logs);
+    res.status(200).json(logs);
 
-    } catch (err) {
+  } catch (err) {
 
-        return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
 
-    }
-
-}
+  }
+};
