@@ -1,31 +1,19 @@
 const db = require("../backend/db");
 
 export default async function handler(req, res) {
-
-    // Initialize DB tables (safe to call each time in serverless)
     await db.initDB();
 
-    if (req.method === "GET") {
-        try {
+    try {
 
+        if (req.method === "GET") {
             const tasks = await db.query(
                 "SELECT * FROM tasks ORDER BY created_at DESC"
             );
-
             return res.status(200).json(tasks);
-
-        } catch (err) {
-
-            return res.status(500).json({ error: err.message });
-
         }
-    }
 
-    if (req.method === "POST") {
-
-        const { title, description, status } = req.body;
-
-        try {
+        if (req.method === "POST") {
+            const { title, description, status } = req.body;
 
             const newTask = await db.query(
                 "INSERT INTO tasks(title,description,status) VALUES($1,$2,$3) RETURNING *",
@@ -33,16 +21,32 @@ export default async function handler(req, res) {
             );
 
             return res.status(201).json(newTask[0]);
-
-        } catch (err) {
-
-            return res.status(500).json({ error: err.message });
-
         }
 
+        if (req.method === "PUT") {
+            const id = req.query.id;
+            const { status } = req.body;
+
+            const updated = await db.query(
+                "UPDATE tasks SET status=$1 WHERE id=$2 RETURNING *",
+                [status, id]
+            );
+
+            return res.status(200).json(updated[0]);
+        }
+
+        if (req.method === "DELETE") {
+            const id = req.query.id;
+
+            await db.query("DELETE FROM tasks WHERE id=$1", [id]);
+
+            return res.status(200).json({ message: "Task deleted" });
+        }
+
+        return res.status(405).json({ message: "Method not allowed" });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: err.message });
     }
-
-    // If method not allowed
-    return res.status(405).json({ message: "Method not allowed" });
-
 }
