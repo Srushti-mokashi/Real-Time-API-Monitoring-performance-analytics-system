@@ -1,5 +1,6 @@
 {
+  "name": "api-monitoring",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://YOUR_RENDER_URL.onrender.com/api/$1" }
+    { "source": "/api/(.*)", "destination": "https://real-time-api-monitoring-performance-75oz.onrender.com/api/$1" }
   ]
 }
