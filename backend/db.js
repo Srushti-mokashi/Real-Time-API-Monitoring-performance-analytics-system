@@ -1,15 +1,45 @@
 import pkg from "pg";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from this file's directory
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const { Pool } = pkg;
 
+// Strip params not supported by pg client (channel_binding) and params
+// that cause hangs (sslmode — pg v8 now treats 'require' as 'verify-full').
+// SSL is controlled exclusively via the ssl:{} option in the Pool config below.
+function cleanConnectionString(url) {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    u.searchParams.delete("channel_binding");
+    u.searchParams.delete("sslmode");
+    return u.toString();
+  } catch (err) {
+    return url;
+  }
+}
+
+const rawUrl = process.env.DATABASE_URL || "";
+const cleanUrl = cleanConnectionString(rawUrl);
+
+if (!cleanUrl) {
+  console.error("DATABASE_URL is not set! Check backend/.env");
+}
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: cleanUrl,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeoutMillis: 20000,  // allowing 20s max for Neon db cold start
+  idleTimeoutMillis: 30000
 });
 
 // Auto-create tables
@@ -46,8 +76,14 @@ const initDB = async () => {
   }
 };
 
+let dbInitialized = false;
+
 const db = {
   query: async (sql, params) => {
+    if (!dbInitialized) {
+      await initDB();
+      dbInitialized = true;
+    }
     const { rows } = await pool.query(sql, params);
     return rows;
   },
@@ -56,3 +92,4 @@ const db = {
 };
 
 export default db;
+

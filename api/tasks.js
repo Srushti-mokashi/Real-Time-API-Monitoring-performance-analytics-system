@@ -1,8 +1,6 @@
-const db = require("../backend/db");
+import db from "../backend/db.js";
 
-module.exports = async (req, res) => {
-
-  await db.initDB();
+export default async function handler(req, res) {
 
   try {
 

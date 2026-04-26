@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "echo 'Static assets ready'"
+    "build": "echo 'Static assets ready'",
+    "dev": "node server.js"
   },
   "dependencies": {
     "axios": "^1.14.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.1",
+    "express": "^5.2.1",
     "pg": "^8.12.0"
   }
 }

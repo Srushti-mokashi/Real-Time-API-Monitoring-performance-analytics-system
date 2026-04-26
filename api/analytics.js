@@ -1,6 +1,6 @@
-const db = require("../backend/db");
+import db from "../backend/db.js";
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
 
   await db.initDB();
 
@@ -39,18 +39,18 @@ module.exports = async (req, res) => {
         ? 0
         : Math.round((errorCount / logs.length) * 100);
 
-    const endpointMap = {};
+    const endpointCountMap = {};
+    const endpointLatencyMap = {};
 
     logs.forEach(log => {
-
-      endpointMap[log.endpoint] =
-        (endpointMap[log.endpoint] || 0) + 1;
-
+      endpointCountMap[log.endpoint] = (endpointCountMap[log.endpoint] || 0) + 1;
+      endpointLatencyMap[log.endpoint] = (endpointLatencyMap[log.endpoint] || 0) + Number(log.response_time || 0);
     });
 
-    const endpointStats = Object.keys(endpointMap).map(endpoint => ({
+    const endpointStats = Object.keys(endpointCountMap).map(endpoint => ({
       endpoint,
-      count: endpointMap[endpoint]
+      count: endpointCountMap[endpoint],
+      avgLatency: Math.round(endpointLatencyMap[endpoint] / endpointCountMap[endpoint])
     }));
 
     res.status(200).json({

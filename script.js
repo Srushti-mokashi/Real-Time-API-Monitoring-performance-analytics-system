@@ -64,7 +64,7 @@ function updateConnectionStatus(text, color) {
     if (statusText) statusText.innerText = text;
 
     if (statusDot) {
-        statusDot.className = `w-1.5 h-1.5 rounded-full bg-${color}-500`;
+        statusDot.className = `w-1.5 h-1.5 rounded-full bg-${color}-500 glow-point`;
     }
 
 }
@@ -182,7 +182,7 @@ async function updateStatus(id, status) {
 
     try {
 
-        await axios.put(`${API_URL}/tasks/${id}`, { status });
+        await axios.put(`${API_URL}/tasks?id=${id}`, { status });
 
         fetchTasks();
 
@@ -201,7 +201,7 @@ async function deleteTask(id) {
 
     try {
 
-        await axios.delete(`${API_URL}/tasks/${id}`);
+        await axios.delete(`${API_URL}/tasks?id=${id}`);
 
         fetchTasks();
 
@@ -233,8 +233,9 @@ async function fetchAnalytics() {
 
         const endpoints = endpointStats.map(e => e.endpoint);
         const requests = endpointStats.map(e => Number(e.count));
+        const latencies = endpointStats.map(e => Number(e.avgLatency));
 
-        renderCharts(endpoints, requests);
+        renderCharts(endpoints, requests, latencies);
 
     } catch (err) {
 
@@ -288,9 +289,10 @@ async function fetchLogs() {
 
 // ---------------- CHARTS ----------------
 
-function renderCharts(endpoints, requests) {
+function renderCharts(endpoints, requests, latencies) {
 
     if (endpointChart) endpointChart.destroy();
+    if (responseChart) responseChart.destroy();
 
     endpointChart = new Chart(
         document.getElementById("endpointChart"),
@@ -308,6 +310,36 @@ function renderCharts(endpoints, requests) {
                 responsive: true,
                 plugins: {
                     legend: { display: false }
+                }
+            }
+        }
+    );
+
+    responseChart = new Chart(
+        document.getElementById("responseChart"),
+        {
+            type: "line",
+            data: {
+                labels: endpoints,
+                datasets: [{
+                    label: "Avg Latency (ms)",
+                    data: latencies,
+                    borderColor: "#34d399",
+                    backgroundColor: "rgba(52, 211, 153, 0.1)",
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         }
