@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "echo 'Static assets ready'",
+    "start": "node server.js",
     "dev": "node server.js"
   },
   "dependencies": {
